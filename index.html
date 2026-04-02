@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InclusifAI Development Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #050930;
+  --cream: #f6f4ef;
+  --warm-white: #fdfcf9;
+  --teal: #0d9373;
+  --violet: #7c5cbf;
+  --bronze: #b87d2b;
+  --red: #c44d4d;
+  --blue: #2563eb;
+  --slate: #555e6b;
+  --slate-light: #94a3b8;
+  --border: #e5e1d8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:#f1f0ec;color:var(--navy);overflow:auto}
+
+.page-header{
+  position:sticky;top:0;z-index:100;background:var(--navy);padding:20px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.page-header h1{font-size:20px;font-weight:700;color:white;letter-spacing:-0.02em}
+.page-header .subtitle{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px}
+
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.6)}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+
+.canvas{padding:40px;min-width:100%}
+
+/* Phase sections */
+.phase{margin-bottom:48px}
+.phase-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.phase-label{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;padding:6px 14px;border-radius:6px;color:white}
+.phase-title{font-size:22px;font-weight:700;color:var(--navy)}
+.phase-timeline{font-size:12px;color:var(--slate-light);font-weight:500;margin-left:auto}
+
+.cards-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+
+/* Feature cards */
+.card{
+  width:320px;background:var(--warm-white);border:1.5px solid var(--border);
+  border-radius:12px;padding:20px;position:relative;overflow:hidden;
+  transition:box-shadow 0.2s,transform 0.2s;flex-shrink:0;
+}
+.card:hover{box-shadow:0 8px 24px rgba(5,9,48,0.08);transform:translateY(-2px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.card.cat-core::before{background:var(--teal)}
+.card.cat-funder::before{background:var(--violet)}
+.card.cat-growth::before{background:var(--bronze)}
+.card.cat-infra::before{background:var(--blue)}
+.card.cat-revenue::before{background:var(--red)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.card h3{font-size:15px;font-weight:700;color:var(--navy);line-height:1.25;flex:1}
+.card-priority{font-size:9px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:0.06em;flex-shrink:0;margin-left:8px}
+.p0{background:#dcfce7;color:#166534}
+.p1{background:#dbeafe;color:#1e40af}
+.p2{background:#fef3c7;color:#92400e}
+.p3{background:#f3e8ff;color:#6b21a8}
+
+.card-desc{font-size:12px;color:var(--slate);line-height:1.45;margin-bottom:14px}
+
+.card-metrics{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.metric-tag{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.04em}
+.mt-retention{background:rgba(13,147,115,0.08);color:var(--teal)}
+.mt-revenue{background:rgba(196,77,77,0.08);color:var(--red)}
+.mt-acquisition{background:rgba(124,92,191,0.08);color:var(--violet)}
+.mt-engagement{background:rgba(184,125,43,0.08);color:var(--bronze)}
+.mt-trust{background:rgba(37,99,235,0.08);color:var(--blue)}
+
+.card-impacts{border-top:1px solid var(--border);padding-top:10px}
+.impact-row{display:flex;gap:8px;margin-bottom:5px;align-items:flex-start}
+.impact-icon{font-size:10px;flex-shrink:0;margin-top:2px}
+.impact-text{font-size:11px;color:var(--slate);line-height:1.35}
+.impact-label{font-weight:700;color:var(--navy)}
+
+/* KPI summary section */
+.kpi-section{background:var(--navy);border-radius:14px;padding:32px;margin-top:20px;margin-bottom:48px}
+.kpi-section h2{font-size:18px;font-weight:700;color:white;margin-bottom:20px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px}
+.kpi-card .kpi-num{font-family:'Inter',sans-serif;font-size:28px;font-weight:900;color:var(--teal);line-height:1}
+.kpi-card .kpi-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px}
+.kpi-card .kpi-target{font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
+
+/* Dependency arrows via lines */
+.dep-note{font-size:10px;color:var(--slate-light);font-style:italic;margin-top:6px}
+
+@media(max-width:768px){
+  .cards-row{flex-direction:column}
+  .card{width:100%}
+  .page-header{flex-direction:column;align-items:flex-start;gap:12px}
+  .legend{gap:8px}
+}
+
+@media print{
+  .page-header{position:static}
+  body{background:white}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>InclusifAI Development Roadmap</h1>
+    <div class="subtitle">Product, Engineering & Business Impact Assessment</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Core Platform</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--violet)"></div>Funder Side</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--bronze)"></div>Growth & Engagement</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Infrastructure</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Revenue</div>
+  </div>
+</div>
+
+<div class="canvas">
+
+<!-- KPI TARGETS -->
+<div class="kpi-section">
+  <h2>Target KPIs (12-Month Horizon)</h2>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-num">500+</div>
+      <div class="kpi-label">Active founders on platform</div>
+      <div class="kpi-target">Current: 85 | 6x growth target</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">15+</div>
+      <div class="kpi-label">Institutional partners</div>
+      <div class="kpi-target">Current: 8 | Running apps through platform</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">$165K</div>
+      <div class="kpi-label">Year 1 ARR</div>
+      <div class="kpi-target">Partner subscriptions + funder access</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">60%</div>
+      <div class="kpi-label">Monthly active retention</div>
+      <div class="kpi-target">Founders returning monthly</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">100+</div>
+      <div class="kpi-label">Spotlight opportunities</div>
+      <div class="kpi-target">Direct-apply through platform</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">4</div>
+      <div class="kpi-label">Reverse Pitch events / year</div>
+      <div class="kpi-target">Quarterly, co-hosted with partners</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 1: NOW - IN PROGRESS -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-label" style="background:var(--teal)">Phase 1</div>
+    <div class="phase-title">Foundation & Stability</div>
+    <div class="phase-timeline">April - May 2026</div>
+  </div>
+  <div class="cards-row">
+
+    <div class="card cat-core">
+      <div class="card-top"><h3>Funding Roadmap</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">Personalized journey map showing where a founder stands, what to do next, and which milestones to hit. Computed by sync-roadmap edge function using GPT-4.1-mini.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-retention">Retention</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Founders know exactly what to do next. Reduces confusion and drop-off.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Increases session frequency. Founders return to check progress.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> +20% monthly active retention. Avg sessions/week from 1.2 to 2.5.</span></div>
+      </div>
+      <div class="dep-note">Status: Tables created. Edge function deployed. UI built on /roadmap.</div>
+    </div>
+
+    <div class="card cat-core">
+      <div class="card-top"><h3>Optimized Smart Matching</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">Remove dead leads, expired opportunities, and mismatches from the 6,000+ database. Surface spotlight opportunities first. Improve match algorithm accuracy.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-retention">Retention</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Every match feels relevant. No more clicking dead links or expired programs.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Trust in matching = willingness to apply through platform = better conversion data.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Match click-through rate from ~5% to 15%+. Reduce reported dead links to &lt;2%.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-core">
+      <div class="card-top"><h3>CRM / Tracker Tool</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">Pipeline management for funding applications. Track status, deadlines, conversations, and outcomes across all opportunities a founder is pursuing.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-retention">Retention</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> One place to manage all funding activity. Replaces spreadsheets and sticky notes.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Highest-retention feature. If founders track here, they don't leave.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Founders using tracker have 3x retention vs. those who don't.</span></div>
+      </div>
+      <div class="dep-note">Status: Base tracker exists. Data rooms, video, calendar in progress.</div>
+    </div>
+
+    <div class="card cat-core">
+      <div class="card-top"><h3>Data Rooms (in Tracker)</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">Secure document storage within each tracked opportunity. Founders upload pitch decks, financials, term sheets. Shareable with specific funders.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Professional document management. No more emailing PDFs back and forth.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Deepens platform stickiness. Documents live here = founders stay here.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Avg docs uploaded per founder. Target: 3+ documents within 30 days.</span></div>
+      </div>
+      <div class="dep-note">Depends on: CRM/Tracker. Riipen student (Justin) built foundation.</div>
+    </div>
+
+    <div class="card cat-core">
+      <div class="card-top"><h3>Video Conferencing + Calendar Sync</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">Jitsi integration for video calls within the tracker. Gmail/Outlook calendar syncing for meeting scheduling. Managed within each tracked opportunity.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-engagement">Engagement</span>
+        <span class="metric-tag mt-retention">Retention</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Schedule and take funder meetings without leaving the platform.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Platform becomes the meeting hub, not just the discovery tool.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Meetings booked through platform. Target: 20+ meetings/month by Q3.</span></div>
+      </div>
+      <div class="dep-note">Depends on: CRM/Tracker. Riipen student (Sahil) building. Extension granted.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 2: FUNDER SIDE -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-label" style="background:var(--violet)">Phase 2</div>
+    <div class="phase-title">Funder Side & Two-Sided Marketplace</div>
+    <div class="phase-timeline">May - July 2026</div>
+  </div>
+  <div class="cards-row">
+
+    <div class="card cat-funder">
+      <div class="card-top"><h3>Funder Dashboard</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">The entire funder-side experience. Investors log in and see scored founders matched to their thesis, stage, sector, and geography. The core of the two-sided marketplace.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-revenue">Revenue</span>
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Funders see pre-scored deal flow aligned with their criteria. No cold screening.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Unlocks funder-side revenue. Subscriptions, per-intro fees, premium access.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Funder accounts created. Target: 10 paying funder accounts by Q4.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> $1,500-25,000/year per funder depending on tier.</span></div>
+      </div>
+      <div class="dep-note">Nazmul assigned. Massive build: profile, matching, messaging, analytics.</div>
+    </div>
+
+    <div class="card cat-funder">
+      <div class="card-top"><h3>Funder Profile & Thesis Input</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">Investors create their own profile with thesis, sectors, stages, check sizes, geography. This data powers the smart matching from the funder side.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Verified, current investor data. Founders trust matches because funders opted in.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Voluntarily submitted data is more valuable than scraped data. Competitive moat vs Diaminate.</span></div>
+      </div>
+      <div class="dep-note">Depends on: Funder Dashboard. Component of the funder-side build.</div>
+    </div>
+
+    <div class="card cat-funder">
+      <div class="card-top"><h3>Funder-Side Smart Match</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">Matching algorithm running in reverse: shows funders which founders match their criteria, with readiness scores, SWOT summaries, and passport data.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-revenue">Revenue</span>
+        <span class="metric-tag mt-trust">Trust</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Funders discover founders they would never find through their existing network.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> This is the product funders pay for. Core of the subscription model.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Matches viewed per funder session. Intros requested per month.</span></div>
+      </div>
+      <div class="dep-note">Depends on: Funder Profile, existing Smart Match algorithm.</div>
+    </div>
+
+    <div class="card cat-funder">
+      <div class="card-top"><h3>Partner Portal (3rd Party Dashboards)</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">PARO, OBI, Innovation Factory etc. log in and see applicants to their programs. Filter by score, sector, stage. Review passports, SWOTs, documents. Manage their pipeline.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-revenue">Revenue</span>
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Partners get structured, scored applicants instead of cold PDFs. Massive time savings.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> This is the B2B product. Partners pay annual subscription for the tech layer.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Partners onboarded. Applications processed through platform. Time saved per review cycle.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> $6,000-50,000/year per partner depending on size.</span></div>
+      </div>
+      <div class="dep-note">Core of B2B monetization. PARO and OBI conversations active.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 3: GROWTH & ENGAGEMENT -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-label" style="background:var(--bronze)">Phase 3</div>
+    <div class="phase-title">Growth, Engagement & Retention</div>
+    <div class="phase-timeline">June - August 2026</div>
+  </div>
+  <div class="cards-row">
+
+    <div class="card cat-growth">
+      <div class="card-top"><h3>Weekly Push Emails</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">"Your new matches are here" weekly digest. New opportunities, score changes, upcoming deadlines, spotlight applications open. Automated via Mailchimp or Supabase Edge Functions.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-retention">Retention</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Founders never miss a match. Platform comes to them, not the other way around.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Email is the #1 re-engagement channel. Drives weekly logins without paid ads.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Email open rate >35%. Click-to-platform rate >12%. Weekly logins +40%.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-growth">
+      <div class="card-top"><h3>Opportunity Search + DB Enrichment</h3><span class="card-priority p2">P2</span></div>
+      <div class="card-desc">Founders search for a specific funding opportunity. If not in the database, the query is stored. Staff reviews and adds qualifying opportunities. DB grows from founder demand.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-engagement">Engagement</span>
+        <span class="metric-tag mt-trust">Trust</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Platform responds to what founders actually need. Feels personal and responsive.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> User-driven data enrichment. DB grows organically with real founder demand signals.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Searches/month. % of searches resulting in new DB additions. DB growth rate.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-growth">
+      <div class="card-top"><h3>Resource Hub</h3><span class="card-priority p2">P2</span></div>
+      <div class="card-desc">Partner discount codes, helpful articles, guides, templates. InclusifAI partnership perks (AWS credits, legal templates, etc). Curated, not crowdsourced.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-retention">Retention</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Value beyond funding. Founders get perks just for being on the platform.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Partnership revenue from resource partners. Retention driver.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Resource page visits/month. Partner code redemption rate.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-growth">
+      <div class="card-top"><h3>One Minute to $1,000</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">Rolling micro-pitch competition. 60-second video upload. $1,000 prize per cycle, sponsor-funded. Always active on the platform as a spotlight opportunity.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+        <span class="metric-tag mt-revenue">Revenue</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Low barrier entry point. Any founder, any stage. Just be creative.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Content engine + sponsor revenue + founder acquisition funnel.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> $5K-20K/year per sponsor. Admin fee built into sponsorship.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-growth">
+      <div class="card-top"><h3>Curated Capital Roster</h3><span class="card-priority p0">P0</span></div>
+      <div class="card-desc">Rolling application for high-readiness founders (70%+ score). Builds a permanent roster for funder introductions, Reverse Pitch events, and partner meetings.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-retention">Retention</span>
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> One application = ongoing access to curated investor introductions.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Living roster gives leverage in every partner and funder conversation.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Roster size. Activations per quarter. Conversion rate (intro to meeting).</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 4: INFRASTRUCTURE -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-label" style="background:var(--blue)">Phase 4</div>
+    <div class="phase-title">Infrastructure & Administration</div>
+    <div class="phase-timeline">July - September 2026</div>
+  </div>
+  <div class="cards-row">
+
+    <div class="card cat-infra">
+      <div class="card-top"><h3>Admin CRM</h3><span class="card-priority p1">P1</span></div>
+      <div class="card-desc">Internal dashboard for the InclusifAI team. Calendar syncing, testimonial management, user feedback capture, founder pipeline overview, partner relationship tracking.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-engagement">Engagement</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Better internal ops = faster response times, better founder support.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Replaces scattered tools (spreadsheets, email, Notion) with one system.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Internal response time to founder queries. Testimonials collected/month.</span></div>
+      </div>
+      <div class="dep-note">Yahya (Riipen) built initial admin dashboard. Needs expansion.</div>
+    </div>
+
+    <div class="card cat-infra">
+      <div class="card-top"><h3>User Feedback System</h3><span class="card-priority p2">P2</span></div>
+      <div class="card-desc">In-platform feedback collection. NPS scores, feature requests, bug reports. Captured and routed to admin CRM. Feeds product decisions with real data.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-trust">Trust</span>
+        <span class="metric-tag mt-retention">Retention</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Founders feel heard. Feature requests are acknowledged and tracked.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Product decisions driven by user data. Reduces guesswork on what to build next.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> NPS score. Feedback submissions/month. Feature request resolution rate.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-infra">
+      <div class="card-top"><h3>Testimonial Collection Pipeline</h3><span class="card-priority p2">P2</span></div>
+      <div class="card-desc">Automated prompts after key platform milestones (first score, first match, first application). Captures testimonials for marketing. Feeds into landing page marquee and socials.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+        <span class="metric-tag mt-trust">Trust</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Founders featured in testimonials get visibility. Mutual benefit.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Social proof pipeline. Never scramble for quotes again.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">KPI:</span> Testimonials collected per month. Landing page conversion rate change.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 5: FUTURE / EXPLORATORY -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-label" style="background:var(--red)">Phase 5</div>
+    <div class="phase-title">Revenue Expansion & Exploratory</div>
+    <div class="phase-timeline">Q4 2026 - Q1 2027</div>
+  </div>
+  <div class="cards-row">
+
+    <div class="card cat-revenue">
+      <div class="card-top"><h3>Marketplace (Service Providers)</h3><span class="card-priority p3">P3</span></div>
+      <div class="card-desc">Vetted directory of lawyers, accountants, consultants, designers. Founders browse and connect. Service providers pay for listing or per-referral fee.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-revenue">Revenue</span>
+        <span class="metric-tag mt-retention">Retention</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Founders find trusted service providers without cold searching. Vetted by InclusifAI.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> New revenue stream. Listing fees or referral commissions from service providers.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> $500-2,000/year per listed provider, or 5-10% referral commission.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-revenue">
+      <div class="card-top"><h3>LinkedIn Profile Sync</h3><span class="card-priority p3">P3</span></div>
+      <div class="card-desc">Sync founder's LinkedIn connections to identify warm paths to funders. "Your 2nd-degree connection knows the GP at Fund X." Feasibility TBD (LinkedIn API restrictions).</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-engagement">Engagement</span>
+        <span class="metric-tag mt-trust">Trust</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Warm introductions > cold outreach. Shows founders connections they didn't know they had.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Massive differentiator if feasible. No competitor has this.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Risk:</span> LinkedIn API is restrictive. May need OAuth + limited scraping. Legal review required.</span></div>
+      </div>
+      <div class="dep-note">Exploratory. Needs technical feasibility assessment before committing.</div>
+    </div>
+
+    <div class="card cat-revenue">
+      <div class="card-top"><h3>Reverse Pitch Quarterly (Expansion)</h3><span class="card-priority p2">P2</span></div>
+      <div class="card-desc">Scale from Toronto to Hamilton, Montreal, Vancouver. Co-hosted with regional partners. Platform handles applications, roster, and post-event tracking.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-acquisition">Acquisition</span>
+        <span class="metric-tag mt-revenue">Revenue</span>
+        <span class="metric-tag mt-trust">Trust</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Access to funders in multiple cities. National reach for founders anywhere in Canada.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> Brand expansion. Each city = new partner relationships, new founders, new funders.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> Sponsorship + ticket revenue per event. Target: $5-10K net per event.</span></div>
+      </div>
+    </div>
+
+    <div class="card cat-revenue">
+      <div class="card-top"><h3>Premium Founder Tier</h3><span class="card-priority p3">P3</span></div>
+      <div class="card-desc">Paid tier with advanced features: priority matching, unlimited Aria sessions, data room sharing, analytics dashboard. Free tier remains generous to drive adoption.</div>
+      <div class="card-metrics">
+        <span class="metric-tag mt-revenue">Revenue</span>
+      </div>
+      <div class="card-impacts">
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">User:</span> Power users get more. Casual users still get full value from free tier.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Business:</span> SaaS revenue from founders. Only viable once platform has enough value to justify payment.</span></div>
+        <div class="impact-row"><span class="impact-icon">&#9654;</span><span class="impact-text"><span class="impact-label">Revenue:</span> $29-49/month. Target: 5% conversion of free users at 500+ user base.</span></div>
+      </div>
+      <div class="dep-note">Do not launch until platform has strong free-tier retention (60%+ MAR).</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>
